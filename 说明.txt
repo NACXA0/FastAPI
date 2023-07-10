@@ -1,0 +1,20 @@
+文件结构
+├── app                  # 「app」是一个 Python 包
+│         ├── __init__.py      # 这个文件使「app」成为一个 Python 包
+│         ├── main.py          # 「main」模块，例如 import app.main
+│         ├── dependencies.py  # 「dependencies」模块，例如 import app.dependencies
+│         └── routers          # 路由
+│         │   ├── __init__.py  # 使「routers」成为一个「Python 子包」
+│         │   ├── items.py     # 「items」子模块，例如 import app.routers.items
+│         │   └── users.py     # 「users」子模块，例如 import app.routers.users
+│         └── #internal         # 「internal」是一个「Python 子包」
+│         │   #├── __init__.py  # 使「internal」成为一个「Python 子包」
+│         │   #└── admin.py     # 「admin」子模块，例如 import app.internal.admin
+          └──templates         # 模板
+│             ├── index.html   # 一个模板文件
+              └── base.html    # 一个模板文件
+HTTP方法
+@app.get()请求，并返回
+@app.head()请求，并返回报头
+@app.post()客户端向服务器提交
+@app.put()客户端向服务器提交，并更新资源
