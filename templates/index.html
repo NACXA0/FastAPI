@@ -6,5 +6,34 @@
 </head>
 <body>
     {temp}
+</body><br>
+<body>
+文本输入框：
+<from>
+    <label for="text-send">输入文本：</label>
+     <button id="send">发送</button>
+</from>
+
+
+</body><br>
+<body>
+    文本输出框：{%text-receive%}
+<textarea>服务器返回的文本</textarea>
+</body><br>
+<body>
+必选项：
+    模型选择：
+    <select name="model" id="model">
+        <option value="chatglm_std">标准版chatglm_std</option>
+        <option value="chatglm_lite">高速精简版chatglm_list</option>
+    </select>
+</body><br>
+<body>
+可选项：
+    top_p：
+<input type="number" name="top_p" id="top_p" value="0.9" />
+    temperature：
+<input type="number" name="temperature" id="temperature" value="0.9" />
+
 </body>
 </html>

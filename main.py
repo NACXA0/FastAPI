@@ -2,6 +2,7 @@ from typing import Union
 
 from fastapi import FastAPI
 from pydantic import BaseModel
+from logic.GLM-API import *
 
 app = FastAPI()
 
@@ -16,8 +17,8 @@ class text_class(BaseModel):#接收信息然后返回
 
 
 @app.get("/")
-def read_root():
-    return {"message": "Hellow World1324"}
+def read_root(q:str):
+    return {"item":q,"message": "Hellow World1324"}
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):
