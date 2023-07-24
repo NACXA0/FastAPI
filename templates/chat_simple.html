@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>简单问答阻塞聊天室</title>
+</head>
+<body>
+<form onsubmit="return True;">
+    <h3>简单问答阻塞聊天室：</h3>
+    <textarea id="chat_simple_responseText" style="width: 500px; height: 300px;"></textarea>
+    <br>
+    <input id="chat_simple_message" type="text" name="message" style="width: 300px" placeholder="在此输入聊天信息"
+           onkeydown="enter_message(value)">
+    <input type="button" value="发送信息" onclick="send_message(this.form.message.value)">
+    <input type="button" onclick="javascript:document.getElementById('responseText').value=''" value="清空聊天记录">
+</form>
+</body>
+</html>
