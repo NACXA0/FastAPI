@@ -3,6 +3,7 @@ from typing import Union
 from fastapi import FastAPI
 from pydantic import BaseModel
 from logic.GLM-API import *
+from logic.Socketlogic import router, init_socketio, socketio
 
 app = FastAPI()
 
@@ -14,6 +15,15 @@ class Item(BaseModel):
 
 class text_class(BaseModel):#接收信息然后返回
     word: "word这里是class里的文字"
+
+# 初始化socketio
+sio = socketio.AsyncServer(async_mode='asgi')
+# app绑定socketio
+app.mount('/', socketio.ASGIApp(socketio_server=sio))  # 使用默认的socket path
+async def startup_event():
+    """Socketio项目初始化"""
+    app.include_router(router)
+    init_socketio(app)
 
 
 @app.get("/")

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket Chat</title>
+</head>
+
+<body>
+用户名:<input type="text" id="uname"/><br>
+<input type="submit" value="登录" onclick="checkuser()"/>
+<script src="static/socket.io-client-4.1.2/dist/socket.io.js"></script>
+<script type="text/javascript">
+        var socket;
+        function get_in_room(name) {
+            if (!window.WebSocket) {
+                window.WebSocket = window.MozWebSocket;
+            }
+            if (window.WebSocket) {
+                socket = io('http://localhost:8080/chat?name=' + name);
+                socket.on('message', function (msg) {
+                    var ta = document.getElementById('responseText');
+                    ta.value = ta.value + '\n' + name + ': ' + event.data;
+                });
+                socket.on('reply', function (msg) {
+                    var ta = document.getElementById('responseText');
+                    ta.value = ta.value + '\n' + msg;
+                    down();
+                });
+            } else {
+                alert("你的瀏覽器不支援 WebSocket！");
+            }
+        }
+
+        function check_login() {
+            if (!window.WebSocket) {
+                return;
+            }
+            if (typeof socket == "undefined") {
+                alert('请先登录');
+                return
+            }
+        }
+
+        function send_message(message) {
+            check_login();
+            socket.emit('chat message', message);
+            empty_input()
+        }
+
+        function enter_message(message) {
+            if (event.keyCode == 13) {
+                check_login();
+                socket.emit('chat message', message);
+                empty_input()
+            }
+        }
+        function getValue(id) {
+            return document.getElementById(id).value;
+        }
+        function checkuser() {
+            var xhr = new XMLHttpRequest();
+            //使用HTTP POST请求与服务器交互数据
+            xhr.open("POST", "http://localhost:8080/login", true);
+            //设置发送数据的请求格式
+            xhr.setRequestHeader('content-type', 'application/json; charset=utf-8');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+                    //根据服务器的响应内容格式处理响应结果
+                    if (xhr.getResponseHeader('content-type') === 'application/json; charset=utf-8') {
+                        var result = JSON.parse(xhr.responseText);
+                        //根据返回结果判断验证码是否正确
+                        if (result.code === 'fail') {
+                            alert('名称已存在');
+                            return;
+                        } else {
+                            console.log(1, xhr.responseText);
+                            get_in_room(getValue('uname'));
+                        }
+                    }
+                }
+            }
+            var sendData = { 'user_name': getValue('uname') };
+            //将用户输入值序列化成字符串
+            xhr.send(JSON.stringify(sendData));
+        }
+        function down() {
+            var textarea = document.getElementById('responseText');
+            textarea.scrollTop = textarea.scrollHeight;
+        }
+
+        function empty_input(){
+            var m = document.getElementById('message');
+            m.value = ''
+        }
+
+
+
+</script>
+<form onsubmit="return false;">
+    <h3>WebSocket 聊天室：</h3>
+    <textarea id="responseText" style="width: 500px; height: 300px;"></textarea>
+    <br>
+    <input id="message" type="text" name="message" style="width: 300px" placeholder="在此输入聊天信息"
+           onkeydown="enter_message(value)">
+    <input type="button" value="发送信息" onclick="send_message(this.form.message.value)">
+    <input type="button" onclick="javascript:document.getElementById('responseText').value=''" value="清空聊天记录">
+</form>
+<br>
+<br>
+</body>
+
+</html>
