@@ -5,9 +5,8 @@ from urllib import parse
 from bidict import bidict
 from __init__ import app
 
-@app.get('/a')
-def a():
-    return {'a': 'a'}
+
+
 
 
 @app.get('/chat_room', summary='聊天室界面')
@@ -37,7 +36,7 @@ async def connect(sid, environ):
 
 
 async def message(sid, data):
-    # print("server received message!", data)
+    print("server received message!", data)
     await sio.emit('reply', f"{user_sid.inv[sid]}: {data}", namespace='/chat')
 
 
@@ -63,5 +62,5 @@ if __name__ == '__main__':
     user_sid = bidict()
     web.run_app(app, host='localhost')
 
-    # 聊天室页面：http://localhost:8080/chat_room
-    # 如果修改ip地址需要修改chat_room.html中的第20行以及第61的localhost
+# 聊天室页面：http://localhost:8080/chat_room
+# 如果修改ip地址需要修改chat_room.html中的第20行以及第61的localhost
