@@ -17,7 +17,7 @@
                 window.WebSocket = window.MozWebSocket;
             }
             if (window.WebSocket) {
-                socket = io('http://localhost:8080/chat?name=' + name);
+                socket = io('127.0.0.1:8000/chat?name=' + name);
                 socket.on('message', function (msg) {
                     var ta = document.getElementById('responseText');
                     ta.value = ta.value + '\n' + name + ': ' + event.data;
@@ -61,7 +61,7 @@
         function checkuser() {
             var xhr = new XMLHttpRequest();
             //使用HTTP POST请求与服务器交互数据
-            xhr.open("POST", "http://localhost:8080/login", true);
+            xhr.open("POST", "127.0.0.1:8000/login", true);
             //设置发送数据的请求格式
             xhr.setRequestHeader('content-type', 'application/json; charset=utf-8');
             xhr.onreadystatechange = function () {

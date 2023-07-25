@@ -1,24 +1,37 @@
 import os
 import socketio
+from __init__ import app
 from urllib import parse
 from bidict import bidict
 from pydantic import BaseModel, Field                       #
 from fastapi.responses import JSONResponse, HTMLResponse    #
-from fastapi import APIRouter                               #
+from fastapi import FastAPI, APIRouter                      #
 from fastapi.staticfiles import StaticFiles                 #
+
 
 user_sid = bidict()
 pwd_path = os.path.dirname(os.path.abspath(__file__))
+
+
+
+
+#Socketio必须先运行的初始化
+# 初始化socketio
+sio = socketio.AsyncServer(async_mode='asgi')
+# app绑定socketio
+app.mount('/', socketio.ASGIApp(socketio_server=sio))  # 使用默认的socket path
+
 
 class Login(BaseModel):
     user_name:str = Field(..., description='1')
 
 router = APIRouter()
 
-@router.get('/chat_room', summary='聊天室界面')
+@router.get('/chat_simple', summary='聊天室界面')
 async def chat_room():
     with open(chat_room) as f:
         return HTMLResponse(f.read())
+    #return templates.TemplateResponse("chat_simple.html", {"request": request})
 
 @router.post('/login', summary='登录')
 async def login(item: Login):
